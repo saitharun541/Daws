@@ -20,4 +20,3 @@ else
 fi
     echo  "$instanceid IP Addredd $IP"
 done
-
