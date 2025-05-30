@@ -30,20 +30,23 @@ do
 
    echo "$instance ($INSTANCE_ID) IP Address: $IP"
    aws route53 change-resource-record-sets \
-  --hosted-zone-id $ZONE_ID \
-  --change-batch '
-  {
-    "Comment": "Testing creating a record set"
-    ,"Changes": [{
-      "Action"              : "CREATE"
-      ,"ResourceRecordSet"  : {
-        "Name"              : "'$instance'.'$DOMAIN_NAME'"
-        ,"Type"             : "A"
-        ,"TTL"              : 1
-        ,"ResourceRecords"  : [{
-            "Value"         : "'$IP'"
-        }]
-      }
-    }]
-  }
+  --hosted-zone-id "$ZONE_ID" \
+  --change-batch "$(cat <<EOF
+{
+  "Comment": "Creating record for $instance.$DOMAIN_NAME",
+  "Changes": [{
+    "Action": "CREATE",
+    "ResourceRecordSet": {
+      "Name": "$instance.$DOMAIN_NAME",
+      "Type": "A",
+      "TTL": 60,
+      "ResourceRecords": [{
+        "Value": "$IP"
+      }]
+    }
+  }]
+}
+EOF
+)"
+
 done
