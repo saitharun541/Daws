@@ -8,7 +8,7 @@ N="\e[0m"
 LOGS_FOLDER="/var/log/roboshop-logs"
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1)
 LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log"
-SCRIPT_DIR="/Daws/Shell-roboshop"
+SCRIPT_DIR=$PWD
 
 mkdir -p $LOGS_FOLDER
 echo "Script started executing at: $(date)" | tee -a $LOG_FILE
@@ -73,7 +73,7 @@ systemctl enable catalogue  &>>$LOG_FILE
 systemctl start catalogue
 VALIDATE $? "Starting Catalogue"
 
-cp mongodb.repo /etc/yum.repos.d/mongodb.repo
+cp $SCRIPT_DIR/mongodb.repo /etc/yum.repos.d/mongodb.repo 
 dnf install mongodb-mongosh -y &>>$LOG_FILE
 VALIDATE $? "Installing MongoDB Client"
 
